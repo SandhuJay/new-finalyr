@@ -1,32 +1,33 @@
 import signupImg from "/images/signup.gif";
 import DoctorAvatar from "/images/doctor-img01.png";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import { useState } from "react";
-
+import axios from "axios";
 const Signup = () => {
-  const [selectedFile, setSelectedFile] = useState(null);
+ 
   const [url, setUrl] = useState("");
 
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
-    photo: selectedFile,
     gender: "",
     role: "patient",
   });
-
+  const navigate = useNavigate();
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-  const handleFileInputChange = async (e) => {
-    const file = e.target.files[0];
-
-    //TODO: handle file upload to CLOUDINARY
-  };
+ 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const{name,email,password,gender,role}=formData;
+    
+    const config={headers:{"Content-Type":"application/json"}};
+    const{data}=await axios.post("http://localhost:8000/api/v1/auth/register",{...formData,url},config);
+    console.log(data);
+    return navigate("/login");
   };
 
   return (
@@ -130,8 +131,17 @@ const Signup = () => {
                     type="file"
                     name="photo"
                     id="customFile"
-                    onChange={handleFileInputChange}
-                    accept=".jpeg, .png"
+                   
+                    accept="image/*"
+                    onChange={(e)=>{
+                      const reader=new FileReader();
+                      reader.onload=()=>{
+                        if(reader.readyState===2){
+                          setUrl(reader.result);
+                        }
+                      };
+                      reader.readAsDataURL(e.target.files[0]);
+                    }}
                     className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pinter"
                   />
                   <label

@@ -1,14 +1,14 @@
 import mongoose from "mongoose";
-import Doctor from "./DoctorSchema";
+import Doctor from "./DoctorSchema.js";
 
 const reviewSchema = new mongoose.Schema(
   {
     doctor: {
-      type: mongoose.Types.ObjectId,
+      type: mongoose.SchemaTypes.ObjectId,
       ref: "Doctor",
     },
     patient: {
-      type: mongoose.Types.ObjectId,
+      type: mongoose.SchemaTypes.ObjectId,
       ref: "Patient",
     },
     reviewText: {

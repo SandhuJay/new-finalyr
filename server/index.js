@@ -2,21 +2,23 @@ import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import express from "express";
 import mongoose from "mongoose";
-import cors from "cors";
 import authRoutes from "./routes/authRoutes.js";
 import patientRoutes from "./routes/patientRoutes.js";
 import doctorRoutes from "./routes/doctorRoutes.js";
 import reviewRoutes from "./routes/reviewRoutes.js";
+import cloudinary from "cloudinary"
+import cors from "cors"
+const app = express();
 
 dotenv.config();
-
-const app = express();
+app.use(cors());
+cloudinary.config({
+  cloud_name:process.env.CLOUDINARY_NAME,
+  api_key:process.env.CLOUDINARY_API_KEY,
+  api_secret:process.env.CLOUDINARY_API_SECRET
+});
 const port = process.env.PORT || 8000;
 const URL = process.env.MONGO_URL;
-
-const corsOptions = {
-  origin: true,
-};
 
 // database connection
 mongoose.set("strictQuery", false);
@@ -34,7 +36,6 @@ const dbConnection = async () => {
 
 // ==== middlewares ====
 app.use(express.json());
-app.use(cors(corsOptions));
 app.use(cookieParser());
 
 // ==== Routes =====

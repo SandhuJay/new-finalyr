@@ -5,7 +5,7 @@ const PatientSchema = new mongoose.Schema({
   password: { type: String, required: true },
   name: { type: String, required: true },
   phone: { type: Number },
-  photo: { type: String },
+  avatar: { type: String },
   role: {
     type: String,
     enum: ["patient", "admin"],
@@ -13,7 +13,7 @@ const PatientSchema = new mongoose.Schema({
   },
   gender: { type: String, enum: ["male", "female", "other"] },
   bloodType: { type: String },
-  appointments: [{ type: mongoose.Types.ObjectId, ref: "Appointment" }],
+  appointments: [{ type: mongoose.SchemaTypes.ObjectId, ref: "Appointment" }],
 });
 
 export default mongoose.model("Patient", PatientSchema);

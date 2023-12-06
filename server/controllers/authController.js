@@ -2,10 +2,15 @@ import Doctor from "../models/DoctorSchema.js";
 import Patient from "../models/PatientSchema.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import cloudinary from "cloudinary"
 
 export const Register = async (req, res) => {
   const { name, email, password, gender, role, photo } = req.body;
-
+   const myCloud=await cloudinary.v2.uploader.upload(req.body.url,{
+    folder:"avatars",
+    width:150,
+    crop:"scale"
+   })
   try {
     let user = null;
     if (role === "patient") {
@@ -31,7 +36,7 @@ export const Register = async (req, res) => {
         password: hashedPassword,
         gender,
         role,
-        photo,
+        avatar:myCloud.secure_url
       });
     }
     if (role === "doctor") {
@@ -58,9 +63,13 @@ export const Register = async (req, res) => {
   }
 };
 
+
+
+
+
 export const Login = async (req, res) => {
   const { email } = req.body;
-
+  
   try {
     let user = null;
     const patient = await Patient.findOne({ email: email });

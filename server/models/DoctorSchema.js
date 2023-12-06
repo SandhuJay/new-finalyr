@@ -24,7 +24,7 @@ const DoctorSchema = new mongoose.Schema({
   bio: { type: String, maxLength: 50 },
   about: { type: String },
   timeSlots: { type: Array },
-  reviews: [{ type: mongoose.Types.ObjectId, ref: "Review" }],
+  reviews: [{ type: mongoose.SchemaTypes.ObjectId, ref: "Review" }],
   averageRating: {
     type: Number,
     default: 0,
@@ -38,7 +38,7 @@ const DoctorSchema = new mongoose.Schema({
     enum: ["pending", "approved", "cancelled"],
     default: "pending",
   },
-  appointments: [{ type: mongoose.Types.ObjectId, ref: "Appointment" }],
+  appointments: [{ type: mongoose.SchemaTypes.ObjectId, ref: "Appointment" }],
 });
 
 export default mongoose.model("Doctor", DoctorSchema);
